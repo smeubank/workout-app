@@ -10,6 +10,8 @@ class ExercisesState {
   final int currentPage;
   final bool hasNextPage;
   final bool hasPreviousPage;
+  final String? searchQuery;
+  final String? selectedCategory;
 
   ExercisesState({
     this.exercises = const [],
@@ -18,7 +20,31 @@ class ExercisesState {
     this.currentPage = 1,
     this.hasNextPage = false,
     this.hasPreviousPage = false,
+    this.searchQuery,
+    this.selectedCategory,
   });
+
+  ExercisesState copyWith({
+    List<Exercise>? exercises,
+    bool? isLoading,
+    String? error,
+    int? currentPage,
+    bool? hasNextPage,
+    bool? hasPreviousPage,
+    String? searchQuery,
+    String? selectedCategory,
+  }) {
+    return ExercisesState(
+      exercises: exercises ?? this.exercises,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+      currentPage: currentPage ?? this.currentPage,
+      hasNextPage: hasNextPage ?? this.hasNextPage,
+      hasPreviousPage: hasPreviousPage ?? this.hasPreviousPage,
+      searchQuery: searchQuery ?? this.searchQuery,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+    );
+  }
 }
 
 class ExercisesInitial extends ExercisesState {}
@@ -68,34 +94,45 @@ class ExercisesCubit extends Cubit<ExercisesState> {
   String? _selectedCategory;
   Exercise? _lastDeletedExercise;
 
-  ExercisesCubit() : super(ExercisesInitial());
+  ExercisesCubit() : super(ExercisesState());
 
-  Future<void> loadExercises() async {
+  Future<void> loadPage(int page) async {
     try {
-      emit(ExercisesLoading());
-      final exercises = await _repository.getExercises();
-      emit(ExercisesLoaded(exercises, 
-        searchQuery: _searchQuery, 
-        selectedCategory: _selectedCategory
+      emit(state.copyWith(isLoading: true));
+      final exercises = await _repository.getExercises(page: page);
+      
+      emit(state.copyWith(
+        exercises: exercises,
+        currentPage: page,
+        isLoading: false,
+        hasNextPage: exercises.length == 20,
+        hasPreviousPage: page > 1,
+        error: null,
       ));
     } catch (e) {
-      emit(ExercisesError(e.toString()));
+      emit(state.copyWith(
+        error: e.toString(),
+        isLoading: false,
+      ));
     }
   }
 
-  void searchExercises(String query) {
-    print('Searching for: $query');
-    _searchQuery = query;
-    if (state is ExercisesLoaded) {
-      final currentState = state as ExercisesLoaded;
-      print('Current exercises count: ${currentState.exercises.length}');
-      emit(ExercisesLoaded(
-        currentState.exercises,
+  Future<void> searchExercises(String query) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final exercises = await _repository.searchExercises(query);
+      
+      emit(state.copyWith(
+        exercises: exercises,
         searchQuery: query,
-        selectedCategory: _selectedCategory,
+        isLoading: false,
+        error: null,
       ));
-    } else {
-      print('State is not ExercisesLoaded: $state');
+    } catch (e) {
+      emit(state.copyWith(
+        error: e.toString(),
+        isLoading: false,
+      ));
     }
   }
 
@@ -123,7 +160,7 @@ class ExercisesCubit extends Cubit<ExercisesState> {
       }
 
       await _repository.updateExercise(exercise);
-      await loadExercises();
+      await loadPage(state.currentPage);
       return true;
     } catch (e) {
       emit(ExercisesError(e.toString()));
@@ -164,7 +201,7 @@ class ExercisesCubit extends Cubit<ExercisesState> {
     if (_lastDeletedExercise != null && state is ExercisesLoaded) {
       try {
         await _repository.createExercise(_lastDeletedExercise!);
-        await loadExercises();
+        await loadPage(state.currentPage);
         _lastDeletedExercise = null;
       } catch (e) {
         emit(ExercisesError(e.toString()));
@@ -195,7 +232,7 @@ class ExercisesCubit extends Cubit<ExercisesState> {
       }
 
       await _repository.createExercise(exercise);
-      await loadExercises();
+      await loadPage(state.currentPage);
       return true;
     } catch (e) {
       emit(ExercisesError(e.toString()));
@@ -229,5 +266,10 @@ class ExercisesCubit extends Cubit<ExercisesState> {
       await Sentry.captureException(e, stackTrace: stackTrace);
       throw Exception('Failed to load exercises: $e');
     }
+  }
+
+  Future<void> loadExercises() async {
+    // This is a convenience method that loads the first page
+    await loadPage(1);
   }
 }
