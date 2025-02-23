@@ -12,7 +12,7 @@ _$WorkoutTemplateImpl _$$WorkoutTemplateImplFromJson(
   id: json['id'] as String,
   userId: json['userId'] as String,
   name: json['name'] as String,
-  description: json['description'] as String?,
+  description: json['description'] as String,
   createdAt: DateTime.parse(json['createdAt'] as String),
   exercises:
       (json['exercises'] as List<dynamic>?)

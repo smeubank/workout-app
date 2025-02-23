@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'template_exercise.dart';
+import 'package:workout_tracker/features/exercises/domain/models/exercise.dart';
 
 part 'workout_template.freezed.dart';
 part 'workout_template.g.dart';
@@ -10,11 +11,11 @@ class WorkoutTemplate with _$WorkoutTemplate {
     required String id,
     required String userId,
     required String name,
-    String? description,
+    required String description,
     required DateTime createdAt,
     @Default([]) List<TemplateExercise> exercises,
   }) = _WorkoutTemplate;
 
-  factory WorkoutTemplate.fromJson(Map<String, dynamic> json) => 
+  factory WorkoutTemplate.fromJson(Map<String, dynamic> json) =>
       _$WorkoutTemplateFromJson(json);
-} 
+}

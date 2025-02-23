@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": [
+        "--dart-define=SENTRY_DSN=${env:SENTRY_DSN}",
+        "--dart-define=ENVIRONMENT=development"
+      ]
+    }
+  ]
+} 

@@ -24,7 +24,7 @@ mixin _$WorkoutTemplate {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   List<TemplateExercise> get exercises => throw _privateConstructorUsedError;
 
@@ -49,7 +49,7 @@ abstract class $WorkoutTemplateCopyWith<$Res> {
     String id,
     String userId,
     String name,
-    String? description,
+    String description,
     DateTime createdAt,
     List<TemplateExercise> exercises,
   });
@@ -73,7 +73,7 @@ class _$WorkoutTemplateCopyWithImpl<$Res, $Val extends WorkoutTemplate>
     Object? id = null,
     Object? userId = null,
     Object? name = null,
-    Object? description = freezed,
+    Object? description = null,
     Object? createdAt = null,
     Object? exercises = null,
   }) {
@@ -95,10 +95,10 @@ class _$WorkoutTemplateCopyWithImpl<$Res, $Val extends WorkoutTemplate>
                     : name // ignore: cast_nullable_to_non_nullable
                         as String,
             description:
-                freezed == description
+                null == description
                     ? _value.description
                     : description // ignore: cast_nullable_to_non_nullable
-                        as String?,
+                        as String,
             createdAt:
                 null == createdAt
                     ? _value.createdAt
@@ -128,7 +128,7 @@ abstract class _$$WorkoutTemplateImplCopyWith<$Res>
     String id,
     String userId,
     String name,
-    String? description,
+    String description,
     DateTime createdAt,
     List<TemplateExercise> exercises,
   });
@@ -151,7 +151,7 @@ class __$$WorkoutTemplateImplCopyWithImpl<$Res>
     Object? id = null,
     Object? userId = null,
     Object? name = null,
-    Object? description = freezed,
+    Object? description = null,
     Object? createdAt = null,
     Object? exercises = null,
   }) {
@@ -173,10 +173,10 @@ class __$$WorkoutTemplateImplCopyWithImpl<$Res>
                 : name // ignore: cast_nullable_to_non_nullable
                     as String,
         description:
-            freezed == description
+            null == description
                 ? _value.description
                 : description // ignore: cast_nullable_to_non_nullable
-                    as String?,
+                    as String,
         createdAt:
             null == createdAt
                 ? _value.createdAt
@@ -199,7 +199,7 @@ class _$WorkoutTemplateImpl implements _WorkoutTemplate {
     required this.id,
     required this.userId,
     required this.name,
-    this.description,
+    required this.description,
     required this.createdAt,
     final List<TemplateExercise> exercises = const [],
   }) : _exercises = exercises;
@@ -214,7 +214,7 @@ class _$WorkoutTemplateImpl implements _WorkoutTemplate {
   @override
   final String name;
   @override
-  final String? description;
+  final String description;
   @override
   final DateTime createdAt;
   final List<TemplateExercise> _exercises;
@@ -283,7 +283,7 @@ abstract class _WorkoutTemplate implements WorkoutTemplate {
     required final String id,
     required final String userId,
     required final String name,
-    final String? description,
+    required final String description,
     required final DateTime createdAt,
     final List<TemplateExercise> exercises,
   }) = _$WorkoutTemplateImpl;
@@ -298,7 +298,7 @@ abstract class _WorkoutTemplate implements WorkoutTemplate {
   @override
   String get name;
   @override
-  String? get description;
+  String get description;
   @override
   DateTime get createdAt;
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/features/exercises/domain/models/exercise.dart';
 import 'package:workout_tracker/features/exercises/data/repositories/wger_exercise_repository.dart';
+import 'package:sentry/sentry.dart';
 
 abstract class ExercisesState {}
 
@@ -203,4 +204,14 @@ class ExercisesCubit extends Cubit<ExercisesState> {
     
     return errors;
   }
-} 
+
+  Future<List<Exercise>> getExercisesByIds(List<String> ids) async {
+    try {
+      final exercises = await _repository.getExercisesByIds(ids);
+      return exercises;
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      throw Exception('Failed to load exercises: $e');
+    }
+  }
+}

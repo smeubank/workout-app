@@ -42,15 +42,21 @@ android {
 
     defaultConfig {
         applicationId "com.example.workout_tracker"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21  // Required for Supabase
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 1
+        versionName "1.0"
     }
 
     buildTypes {
         release {
             signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ mixin _$Exercise {
   String get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get category => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
   List<String>? get equipment => throw _privateConstructorUsedError;
 
   /// Serializes this Exercise to a JSON map.
@@ -47,6 +48,7 @@ abstract class $ExerciseCopyWith<$Res> {
     String name,
     String? description,
     String? category,
+    String? imageUrl,
     List<String>? equipment,
   });
 }
@@ -70,6 +72,7 @@ class _$ExerciseCopyWithImpl<$Res, $Val extends Exercise>
     Object? name = null,
     Object? description = freezed,
     Object? category = freezed,
+    Object? imageUrl = freezed,
     Object? equipment = freezed,
   }) {
     return _then(
@@ -93,6 +96,11 @@ class _$ExerciseCopyWithImpl<$Res, $Val extends Exercise>
                 freezed == category
                     ? _value.category
                     : category // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            imageUrl:
+                freezed == imageUrl
+                    ? _value.imageUrl
+                    : imageUrl // ignore: cast_nullable_to_non_nullable
                         as String?,
             equipment:
                 freezed == equipment
@@ -119,6 +127,7 @@ abstract class _$$ExerciseImplCopyWith<$Res>
     String name,
     String? description,
     String? category,
+    String? imageUrl,
     List<String>? equipment,
   });
 }
@@ -141,6 +150,7 @@ class __$$ExerciseImplCopyWithImpl<$Res>
     Object? name = null,
     Object? description = freezed,
     Object? category = freezed,
+    Object? imageUrl = freezed,
     Object? equipment = freezed,
   }) {
     return _then(
@@ -165,6 +175,11 @@ class __$$ExerciseImplCopyWithImpl<$Res>
                 ? _value.category
                 : category // ignore: cast_nullable_to_non_nullable
                     as String?,
+        imageUrl:
+            freezed == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                    as String?,
         equipment:
             freezed == equipment
                 ? _value._equipment
@@ -183,6 +198,7 @@ class _$ExerciseImpl implements _Exercise {
     required this.name,
     this.description,
     this.category,
+    this.imageUrl,
     final List<String>? equipment,
   }) : _equipment = equipment;
 
@@ -197,6 +213,8 @@ class _$ExerciseImpl implements _Exercise {
   final String? description;
   @override
   final String? category;
+  @override
+  final String? imageUrl;
   final List<String>? _equipment;
   @override
   List<String>? get equipment {
@@ -209,7 +227,7 @@ class _$ExerciseImpl implements _Exercise {
 
   @override
   String toString() {
-    return 'Exercise(id: $id, name: $name, description: $description, category: $category, equipment: $equipment)';
+    return 'Exercise(id: $id, name: $name, description: $description, category: $category, imageUrl: $imageUrl, equipment: $equipment)';
   }
 
   @override
@@ -223,6 +241,8 @@ class _$ExerciseImpl implements _Exercise {
                 other.description == description) &&
             (identical(other.category, category) ||
                 other.category == category) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             const DeepCollectionEquality().equals(
               other._equipment,
               _equipment,
@@ -237,6 +257,7 @@ class _$ExerciseImpl implements _Exercise {
     name,
     description,
     category,
+    imageUrl,
     const DeepCollectionEquality().hash(_equipment),
   );
 
@@ -260,6 +281,7 @@ abstract class _Exercise implements Exercise {
     required final String name,
     final String? description,
     final String? category,
+    final String? imageUrl,
     final List<String>? equipment,
   }) = _$ExerciseImpl;
 
@@ -274,6 +296,8 @@ abstract class _Exercise implements Exercise {
   String? get description;
   @override
   String? get category;
+  @override
+  String? get imageUrl;
   @override
   List<String>? get equipment;
 

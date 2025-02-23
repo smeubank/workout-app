@@ -10,6 +10,7 @@ class Exercise with _$Exercise {
     required String name,
     String? description,
     String? category,
+    String? imageUrl,
     List<String>? equipment,
   }) = _Exercise;
 

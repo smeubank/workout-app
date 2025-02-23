@@ -12,4 +12,9 @@
 -keep class org.postgresql.** { *; }
 
 # Keep your model classes
--keep class com.yourapp.**.model.** { *; } 
+-keep class com.yourapp.**.model.** { *; }
+
+# Fragment and Parcelable
+-keep class * extends androidx.fragment.app.Fragment{}
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable 

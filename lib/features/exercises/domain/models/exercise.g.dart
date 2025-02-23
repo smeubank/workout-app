@@ -12,6 +12,7 @@ _$ExerciseImpl _$$ExerciseImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String?,
       category: json['category'] as String?,
+      imageUrl: json['imageUrl'] as String?,
       equipment:
           (json['equipment'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -24,5 +25,6 @@ Map<String, dynamic> _$$ExerciseImplToJson(_$ExerciseImpl instance) =>
       'name': instance.name,
       'description': instance.description,
       'category': instance.category,
+      'imageUrl': instance.imageUrl,
       'equipment': instance.equipment,
     };
