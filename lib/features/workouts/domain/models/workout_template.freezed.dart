@@ -22,9 +22,11 @@ WorkoutTemplate _$WorkoutTemplateFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$WorkoutTemplate {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
   List<TemplateExercise> get exercises => throw _privateConstructorUsedError;
 
@@ -47,10 +49,10 @@ abstract class $WorkoutTemplateCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
-    String userId,
+    @JsonKey(name: 'user_id') String userId,
     String name,
-    String description,
-    DateTime createdAt,
+    String? description,
+    @JsonKey(name: 'created_at') DateTime createdAt,
     List<TemplateExercise> exercises,
   });
 }
@@ -73,7 +75,7 @@ class _$WorkoutTemplateCopyWithImpl<$Res, $Val extends WorkoutTemplate>
     Object? id = null,
     Object? userId = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? createdAt = null,
     Object? exercises = null,
   }) {
@@ -95,10 +97,10 @@ class _$WorkoutTemplateCopyWithImpl<$Res, $Val extends WorkoutTemplate>
                     : name // ignore: cast_nullable_to_non_nullable
                         as String,
             description:
-                null == description
+                freezed == description
                     ? _value.description
                     : description // ignore: cast_nullable_to_non_nullable
-                        as String,
+                        as String?,
             createdAt:
                 null == createdAt
                     ? _value.createdAt
@@ -126,10 +128,10 @@ abstract class _$$WorkoutTemplateImplCopyWith<$Res>
   @useResult
   $Res call({
     String id,
-    String userId,
+    @JsonKey(name: 'user_id') String userId,
     String name,
-    String description,
-    DateTime createdAt,
+    String? description,
+    @JsonKey(name: 'created_at') DateTime createdAt,
     List<TemplateExercise> exercises,
   });
 }
@@ -151,7 +153,7 @@ class __$$WorkoutTemplateImplCopyWithImpl<$Res>
     Object? id = null,
     Object? userId = null,
     Object? name = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? createdAt = null,
     Object? exercises = null,
   }) {
@@ -173,10 +175,10 @@ class __$$WorkoutTemplateImplCopyWithImpl<$Res>
                 : name // ignore: cast_nullable_to_non_nullable
                     as String,
         description:
-            null == description
+            freezed == description
                 ? _value.description
                 : description // ignore: cast_nullable_to_non_nullable
-                    as String,
+                    as String?,
         createdAt:
             null == createdAt
                 ? _value.createdAt
@@ -197,10 +199,10 @@ class __$$WorkoutTemplateImplCopyWithImpl<$Res>
 class _$WorkoutTemplateImpl implements _WorkoutTemplate {
   const _$WorkoutTemplateImpl({
     required this.id,
-    required this.userId,
+    @JsonKey(name: 'user_id') required this.userId,
     required this.name,
-    required this.description,
-    required this.createdAt,
+    this.description,
+    @JsonKey(name: 'created_at') required this.createdAt,
     final List<TemplateExercise> exercises = const [],
   }) : _exercises = exercises;
 
@@ -210,12 +212,14 @@ class _$WorkoutTemplateImpl implements _WorkoutTemplate {
   @override
   final String id;
   @override
+  @JsonKey(name: 'user_id')
   final String userId;
   @override
   final String name;
   @override
-  final String description;
+  final String? description;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
   final List<TemplateExercise> _exercises;
   @override
@@ -281,10 +285,10 @@ class _$WorkoutTemplateImpl implements _WorkoutTemplate {
 abstract class _WorkoutTemplate implements WorkoutTemplate {
   const factory _WorkoutTemplate({
     required final String id,
-    required final String userId,
+    @JsonKey(name: 'user_id') required final String userId,
     required final String name,
-    required final String description,
-    required final DateTime createdAt,
+    final String? description,
+    @JsonKey(name: 'created_at') required final DateTime createdAt,
     final List<TemplateExercise> exercises,
   }) = _$WorkoutTemplateImpl;
 
@@ -294,12 +298,14 @@ abstract class _WorkoutTemplate implements WorkoutTemplate {
   @override
   String get id;
   @override
+  @JsonKey(name: 'user_id')
   String get userId;
   @override
   String get name;
   @override
-  String get description;
+  String? get description;
   @override
+  @JsonKey(name: 'created_at')
   DateTime get createdAt;
   @override
   List<TemplateExercise> get exercises;

@@ -10,10 +10,10 @@ _$WorkoutTemplateImpl _$$WorkoutTemplateImplFromJson(
   Map<String, dynamic> json,
 ) => _$WorkoutTemplateImpl(
   id: json['id'] as String,
-  userId: json['userId'] as String,
+  userId: json['user_id'] as String,
   name: json['name'] as String,
-  description: json['description'] as String,
-  createdAt: DateTime.parse(json['createdAt'] as String),
+  description: json['description'] as String?,
+  createdAt: DateTime.parse(json['created_at'] as String),
   exercises:
       (json['exercises'] as List<dynamic>?)
           ?.map((e) => TemplateExercise.fromJson(e as Map<String, dynamic>))
@@ -25,9 +25,9 @@ Map<String, dynamic> _$$WorkoutTemplateImplToJson(
   _$WorkoutTemplateImpl instance,
 ) => <String, dynamic>{
   'id': instance.id,
-  'userId': instance.userId,
+  'user_id': instance.userId,
   'name': instance.name,
   'description': instance.description,
-  'createdAt': instance.createdAt.toIso8601String(),
+  'created_at': instance.createdAt.toIso8601String(),
   'exercises': instance.exercises,
 };

@@ -3,7 +3,23 @@ import 'package:workout_tracker/features/exercises/domain/models/exercise.dart';
 import 'package:workout_tracker/features/exercises/data/repositories/wger_exercise_repository.dart';
 import 'package:sentry/sentry.dart';
 
-abstract class ExercisesState {}
+class ExercisesState {
+  final List<Exercise> exercises;
+  final bool isLoading;
+  final String? error;
+  final int currentPage;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
+
+  ExercisesState({
+    this.exercises = const [],
+    this.isLoading = false,
+    this.error,
+    this.currentPage = 1,
+    this.hasNextPage = false,
+    this.hasPreviousPage = false,
+  });
+}
 
 class ExercisesInitial extends ExercisesState {}
 class ExercisesLoading extends ExercisesState {}
