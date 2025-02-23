@@ -7,12 +7,12 @@ part 'template_exercise.g.dart';
 class TemplateExercise with _$TemplateExercise {
   const factory TemplateExercise({
     required String id,
-    required String templateId,
-    required String exerciseId,
+    @JsonKey(name: 'template_id') required String templateId,
+    @JsonKey(name: 'exercise_id') required String exerciseId,
     int? sets,
     int? reps,
     double? weight,
-    required int orderIndex,
+    @JsonKey(name: 'order_index') required int orderIndex,
   }) = _TemplateExercise;
 
   factory TemplateExercise.fromJson(Map<String, dynamic> json) => 

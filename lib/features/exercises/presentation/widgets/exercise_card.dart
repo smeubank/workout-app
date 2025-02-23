@@ -58,7 +58,14 @@ class ExerciseCard extends StatelessWidget {
       child: Dismissible(
         key: Key(exercise.id),
         direction: DismissDirection.endToStart,
-        confirmDismiss: (direction) => _confirmDelete(context),
+        confirmDismiss: (direction) async {
+          final confirmed = await _confirmDelete(context);
+          // Add a small delay to ensure animation completes
+          if (confirmed) {
+            await Future.delayed(const Duration(milliseconds: 200));
+          }
+          return confirmed;
+        },
         onDismissed: (direction) {
           context.read<ExercisesCubit>().deleteExercise(exercise.id);
         },

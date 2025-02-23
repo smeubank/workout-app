@@ -22,11 +22,14 @@ TemplateExercise _$TemplateExerciseFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TemplateExercise {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'template_id')
   String get templateId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'exercise_id')
   String get exerciseId => throw _privateConstructorUsedError;
   int? get sets => throw _privateConstructorUsedError;
   int? get reps => throw _privateConstructorUsedError;
   double? get weight => throw _privateConstructorUsedError;
+  @JsonKey(name: 'order_index')
   int get orderIndex => throw _privateConstructorUsedError;
 
   /// Serializes this TemplateExercise to a JSON map.
@@ -48,12 +51,12 @@ abstract class $TemplateExerciseCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
-    String templateId,
-    String exerciseId,
+    @JsonKey(name: 'template_id') String templateId,
+    @JsonKey(name: 'exercise_id') String exerciseId,
     int? sets,
     int? reps,
     double? weight,
-    int orderIndex,
+    @JsonKey(name: 'order_index') int orderIndex,
   });
 }
 
@@ -134,12 +137,12 @@ abstract class _$$TemplateExerciseImplCopyWith<$Res>
   @useResult
   $Res call({
     String id,
-    String templateId,
-    String exerciseId,
+    @JsonKey(name: 'template_id') String templateId,
+    @JsonKey(name: 'exercise_id') String exerciseId,
     int? sets,
     int? reps,
     double? weight,
-    int orderIndex,
+    @JsonKey(name: 'order_index') int orderIndex,
   });
 }
 
@@ -212,12 +215,12 @@ class __$$TemplateExerciseImplCopyWithImpl<$Res>
 class _$TemplateExerciseImpl implements _TemplateExercise {
   const _$TemplateExerciseImpl({
     required this.id,
-    required this.templateId,
-    required this.exerciseId,
+    @JsonKey(name: 'template_id') required this.templateId,
+    @JsonKey(name: 'exercise_id') required this.exerciseId,
     this.sets,
     this.reps,
     this.weight,
-    required this.orderIndex,
+    @JsonKey(name: 'order_index') required this.orderIndex,
   });
 
   factory _$TemplateExerciseImpl.fromJson(Map<String, dynamic> json) =>
@@ -226,8 +229,10 @@ class _$TemplateExerciseImpl implements _TemplateExercise {
   @override
   final String id;
   @override
+  @JsonKey(name: 'template_id')
   final String templateId;
   @override
+  @JsonKey(name: 'exercise_id')
   final String exerciseId;
   @override
   final int? sets;
@@ -236,6 +241,7 @@ class _$TemplateExerciseImpl implements _TemplateExercise {
   @override
   final double? weight;
   @override
+  @JsonKey(name: 'order_index')
   final int orderIndex;
 
   @override
@@ -293,12 +299,12 @@ class _$TemplateExerciseImpl implements _TemplateExercise {
 abstract class _TemplateExercise implements TemplateExercise {
   const factory _TemplateExercise({
     required final String id,
-    required final String templateId,
-    required final String exerciseId,
+    @JsonKey(name: 'template_id') required final String templateId,
+    @JsonKey(name: 'exercise_id') required final String exerciseId,
     final int? sets,
     final int? reps,
     final double? weight,
-    required final int orderIndex,
+    @JsonKey(name: 'order_index') required final int orderIndex,
   }) = _$TemplateExerciseImpl;
 
   factory _TemplateExercise.fromJson(Map<String, dynamic> json) =
@@ -307,8 +313,10 @@ abstract class _TemplateExercise implements TemplateExercise {
   @override
   String get id;
   @override
+  @JsonKey(name: 'template_id')
   String get templateId;
   @override
+  @JsonKey(name: 'exercise_id')
   String get exerciseId;
   @override
   int? get sets;
@@ -317,6 +325,7 @@ abstract class _TemplateExercise implements TemplateExercise {
   @override
   double? get weight;
   @override
+  @JsonKey(name: 'order_index')
   int get orderIndex;
 
   /// Create a copy of TemplateExercise

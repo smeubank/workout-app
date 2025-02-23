@@ -51,42 +51,32 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<WorkoutsCubit>(
-          create: (context) => WorkoutsCubit(),
-        ),
-        BlocProvider<ExercisesCubit>(
-          create: (context) => ExercisesCubit(),
-        ),
-      ],
-      child: ErrorBoundary(
-        child: BlocBuilder<WorkoutsCubit, WorkoutsState>(
-          builder: (context, state) {
-            if (state is! WorkoutsLoaded) {
-              return const Center(child: CircularProgressIndicator());
-            }
+    return ErrorBoundary(
+      child: BlocBuilder<WorkoutsCubit, WorkoutsState>(
+        builder: (context, state) {
+          if (state is! WorkoutsLoaded) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Create Workout'),
-                actions: [
-                  if (state is! WorkoutsSaving)
-                    TextButton(
-                      onPressed: () => _saveWorkout(context, state.selectedExercises),
-                      child: const Text('Save'),
-                    )
-                  else
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                ],
-              ),
-              body: _buildForm(context, state.selectedExercises, state),
-            );
-          },
-        ),
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Create Workout'),
+              actions: [
+                if (state is! WorkoutsSaving)
+                  TextButton(
+                    onPressed: () => _saveWorkout(context, state.selectedExercises),
+                    child: const Text('Save'),
+                  )
+                else
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            ),
+            body: _buildForm(context, state.selectedExercises, state),
+          );
+        },
       ),
     );
   }

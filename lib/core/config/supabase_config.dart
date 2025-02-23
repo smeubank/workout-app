@@ -8,19 +8,26 @@ class SupabaseConfig {
   static SupabaseClient get client => Supabase.instance.client;
 
   static Future<void> initialize() async {
-    await dotenv.load(fileName: ".env");
-    
-    supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-    supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+    try {
+      print('Initializing Supabase client...');
+      await dotenv.load(fileName: ".env");
+      
+      supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
+      supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 
-    if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
-      throw Exception('Missing Supabase configuration');
+      if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
+        throw Exception('Missing Supabase configuration');
+      }
+
+      await Supabase.initialize(
+        url: supabaseUrl,
+        anonKey: supabaseAnonKey,
+        debug: true, // Set to false in production
+      );
+      print('Supabase client initialized successfully');
+    } catch (e) {
+      print('Failed to initialize Supabase client: $e');
+      rethrow;
     }
-
-    await Supabase.initialize(
-      url: supabaseUrl,
-      anonKey: supabaseAnonKey,
-      debug: true, // Set to false in production
-    );
   }
 } 

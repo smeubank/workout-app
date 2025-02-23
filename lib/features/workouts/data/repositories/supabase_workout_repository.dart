@@ -4,8 +4,11 @@ import '../../domain/models/workout_template.dart';
 import '../../domain/models/template_exercise.dart';
 import '../../domain/repositories/workout_repository.dart';
 import '../../core/exceptions/database_exception.dart';
+import '../../core/exceptions/network_exception.dart';
 import 'package:postgrest/postgrest.dart';
 import '../../core/repositories/base_repository.dart';
+import 'dart:io';
+import 'dart:async';
 
 class SupabaseWorkoutRepository extends BaseRepository implements WorkoutRepository {
   final String _defaultUserId = '00000000-0000-0000-0000-000000000000';
@@ -13,23 +16,39 @@ class SupabaseWorkoutRepository extends BaseRepository implements WorkoutReposit
   @override
   Future<List<WorkoutTemplate>> getWorkoutTemplates() async {
     return executeQuery('fetch workout templates', () async {
-      final response = await SupabaseConfig.client
-          .from('workout_templates')
-          .select('''
-            *,
-            template_exercises (
-              id,
-              exercise_id,
-              sets,
-              reps,
-              weight,
-              order_index
-            )
-          ''')
-          .eq('user_id', _defaultUserId)
-          .order('created_at', ascending: false);
-      
-      return response.map((json) => WorkoutTemplate.fromJson(json)).toList();
+      try {
+        final response = await SupabaseConfig.client
+            .from('workout_templates')
+            .select('''
+              *,
+              template_exercises (
+                id,
+                exercise_id,
+                sets,
+                reps,
+                weight,
+                order_index
+              )
+            ''')
+            .eq('user_id', _defaultUserId)
+            .order('created_at', ascending: false)
+            .timeout(
+              const Duration(seconds: 10),
+              onTimeout: () => throw TimeoutException('Connection timed out'),
+            );
+        
+        if (response == null) {
+          throw NetworkException('No response from server');
+        }
+        
+        return response.map((json) => WorkoutTemplate.fromJson(json)).toList();
+      } on SocketException catch (e) {
+        throw NetworkException('Unable to connect to server: ${e.message}');
+      } on TimeoutException {
+        throw NetworkException('Connection timed out');
+      } catch (e) {
+        throw NetworkException('Network error: $e');
+      }
     });
   }
 

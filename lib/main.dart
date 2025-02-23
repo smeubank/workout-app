@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/core/config/supabase_config.dart';
 import 'package:workout_tracker/features/home/presentation/pages/home_page.dart';
+import 'package:workout_tracker/features/workouts/presentation/cubit/workouts_cubit.dart';
+import 'package:workout_tracker/features/exercises/presentation/cubit/exercises_cubit.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
@@ -12,17 +15,12 @@ void main() async {
   await SentryFlutter.init(
     (options) {
       options.dsn = 'https://9fd643d1d605707829c41a93a36ca05e@o673219.ingest.us.sentry.io/4508865283948544';
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
-      // We recommend adjusting this value in production.
+      options.debug = false;
       options.tracesSampleRate = 1.0;
-      // The sampling rate for profiling is relative to tracesSampleRate
-      // Setting to 1.0 will profile 100% of sampled transactions:
       options.profilesSampleRate = 1.0;
     },
     appRunner: () => runApp(SentryWidget(child: const MyApp())),
   );
-  // TODO: Remove this line after sending the first sample event to sentry.
-  await Sentry.captureException(Exception('This is a sample exception.'));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,13 +28,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Workout Tracker',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<WorkoutsCubit>(
+          create: (context) => WorkoutsCubit(),
+        ),
+        BlocProvider<ExercisesCubit>(
+          create: (context) => ExercisesCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Workout Tracker',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }

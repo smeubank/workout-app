@@ -43,8 +43,10 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
 
   Future<void> loadWorkouts() async {
     try {
+      print('Loading workouts...');
       emit(WorkoutsLoading());
       final workouts = await _repository.getWorkoutTemplates();
+      print('Workouts loaded successfully: ${workouts.length} workouts');
       if (state is WorkoutsLoaded) {
         final currentState = state as WorkoutsLoaded;
         emit(currentState.copyWith(workouts: workouts));
@@ -52,6 +54,8 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
         emit(WorkoutsLoaded(workouts));
       }
     } catch (e, stackTrace) {
+      print('Error loading workouts: $e');
+      print('Stacktrace: $stackTrace');
       await Sentry.captureException(e, stackTrace: stackTrace);
       emit(WorkoutsError(e.toString()));
     }
