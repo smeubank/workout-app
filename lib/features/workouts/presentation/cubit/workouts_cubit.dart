@@ -5,6 +5,7 @@ import 'package:workout_tracker/features/exercises/domain/models/exercise.dart';
 import 'package:workout_tracker/features/workouts/data/repositories/supabase_workout_repository.dart';
 import 'package:workout_tracker/features/workouts/core/exceptions/database_exception.dart';
 import 'package:sentry/sentry.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class WorkoutsState {}
 
@@ -86,8 +87,24 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
   void addExercise(Exercise exercise) {
     if (state is WorkoutsLoaded) {
       final currentState = state as WorkoutsLoaded;
+      final updatedExercises = [...currentState.selectedExercises, exercise];
+      final updatedConfigs = Map<String, TemplateExercise>.from(currentState.exerciseConfigs);
+      
+      // Generate a temporary template ID since we don't have one yet
+      const tempTemplateId = 'temp';
+      
+      updatedConfigs[exercise.id] = TemplateExercise(
+        id: const Uuid().v4(),
+        templateId: tempTemplateId,
+        exerciseId: exercise.id,
+        sets: 3,
+        reps: 10,
+        orderIndex: updatedExercises.length - 1,
+      );
+      
       emit(currentState.copyWith(
-        selectedExercises: [...currentState.selectedExercises, exercise],
+        selectedExercises: updatedExercises,
+        exerciseConfigs: updatedConfigs,
       ));
     }
   }

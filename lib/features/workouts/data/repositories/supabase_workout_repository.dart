@@ -55,10 +55,13 @@ class SupabaseWorkoutRepository extends BaseRepository implements WorkoutReposit
   @override
   Future<WorkoutTemplate> createWorkoutTemplate(WorkoutTemplate template) async {
     try {
+      print('Creating workout template: ${template.name} for user: $_defaultUserId');
+      
       // 1. Create the workout template
       final templateResponse = await SupabaseConfig.client
           .from('workout_templates')
           .insert({
+            'id': template.id,
             'name': template.name,
             'description': template.description,
             'user_id': _defaultUserId,
@@ -66,47 +69,40 @@ class SupabaseWorkoutRepository extends BaseRepository implements WorkoutReposit
           })
           .select()
           .single();
+      
+      print('Template created successfully: ${templateResponse['id']}');
 
-      final createdTemplate = WorkoutTemplate.fromJson({
-        'id': templateResponse['id'],
-        'userId': templateResponse['user_id'],
-        'name': templateResponse['name'],
-        'description': templateResponse['description'],
-        'createdAt': templateResponse['created_at'],
-        'exercises': [],
-      });
-
-      // 2. Create template exercises if any exist
+      // 2. Create template exercises
       if (template.exercises.isNotEmpty) {
-        final exercisesData = template.exercises.asMap().entries.map((entry) {
-          final exercise = entry.value;
-          return {
-            'template_id': createdTemplate.id,
-            'exercise_id': exercise.exerciseId,
-            'order_index': entry.key,
-            'sets': exercise.sets ?? 3,
-            'reps': exercise.reps ?? 10,
-            'weight': exercise.weight,
-          };
+        print('Creating ${template.exercises.length} exercises');
+        final exercisesData = template.exercises.map((exercise) => {
+          'template_id': templateResponse['id'],
+          'exercise_id': exercise.exerciseId,
+          'sets': exercise.sets,
+          'reps': exercise.reps,
+          'weight': exercise.weight ?? 0,
+          'order_index': exercise.orderIndex,
         }).toList();
 
         await SupabaseConfig.client
             .from('template_exercises')
             .insert(exercisesData);
+        
+        print('Exercises created successfully');
       }
 
-      // 3. Fetch the complete template
-      return await getWorkoutTemplateById(createdTemplate.id);
+      // 3. Return the complete template
+      return await getWorkoutTemplateById(templateResponse['id']);
     } catch (e) {
+      print('Error creating workout template: $e');
       if (e is PostgrestException) {
         throw DatabaseException(
-          'Failed to create workout template',
+          'Failed to create workout template: ${e.message}',
           code: e.code,
           details: e.details?.toString(),
           context: {
             'template_name': template.name,
             'exercise_count': template.exercises.length,
-            'user_id': _defaultUserId,
           },
         );
       }
@@ -114,7 +110,7 @@ class SupabaseWorkoutRepository extends BaseRepository implements WorkoutReposit
         'Unexpected error while creating workout template',
         context: {
           'template_name': template.name,
-          'exercise_count': template.exercises.length,
+          'error': e.toString(),
         },
       );
     }

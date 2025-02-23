@@ -9,10 +9,10 @@ part 'workout_template.g.dart';
 class WorkoutTemplate with _$WorkoutTemplate {
   const factory WorkoutTemplate({
     required String id,
-    required String userId,
+    @JsonKey(name: 'user_id') required String userId,
     required String name,
-    required String description,
-    required DateTime createdAt,
+    String? description,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
     @Default([]) List<TemplateExercise> exercises,
   }) = _WorkoutTemplate;
 

@@ -1,6 +1,7 @@
 import 'package:workout_tracker/core/config/supabase_config.dart';
 import '../../domain/models/exercise.dart';
 import '../../domain/repositories/exercise_repository.dart';
+import 'package:uuid/uuid.dart';
 
 class SupabaseExerciseRepository implements ExerciseRepository {
   @override
@@ -26,9 +27,17 @@ class SupabaseExerciseRepository implements ExerciseRepository {
 
   @override
   Future<Exercise> createExercise(Exercise exercise) async {
+    final uuid = const Uuid().v4();
     final response = await SupabaseConfig.client
         .from('exercises')
-        .insert(exercise.toJson())
+        .insert({
+          'id': uuid,
+          'name': exercise.name,
+          'description': exercise.description,
+          'category': exercise.category,
+          'equipment': exercise.equipment,
+          'wger_id': exercise.id,  // Store original Wger ID
+        })
         .select()
         .single();
     
