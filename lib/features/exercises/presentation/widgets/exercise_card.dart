@@ -5,6 +5,7 @@ import '../cubit/exercises_cubit.dart';
 import '../pages/edit_exercise_page.dart';
 import '../../../../core/presentation/widgets/confirmation_dialog.dart';
 import '../pages/exercise_details_page.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -101,10 +102,7 @@ class ExerciseCard extends StatelessWidget {
                       ),
                       if (exercise.description != null) ...[
                         const SizedBox(height: 8),
-                        Text(
-                          exercise.description!,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        _buildDescription(exercise.description!),
                       ],
                       const SizedBox(height: 8),
                       Row(
@@ -183,5 +181,20 @@ class ExerciseCard extends StatelessWidget {
       default:
         return Icons.sports_gymnastics;
     }
+  }
+
+  Widget _buildDescription(String description) {
+    return Html(
+      data: description,
+      style: {
+        "body": Style(
+          padding: HtmlPaddings.zero,
+          margin: Margins.zero,
+        ),
+        "p": Style(
+          margin: Margins.zero,
+        ),
+      },
+    );
   }
 } 
