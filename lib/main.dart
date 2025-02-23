@@ -15,9 +15,11 @@ void main() async {
   await SentryFlutter.init(
     (options) {
       options.dsn = 'https://9fd643d1d605707829c41a93a36ca05e@o673219.ingest.us.sentry.io/4508865283948544';
-      options.debug = false;
+      options.debug = true;
       options.tracesSampleRate = 1.0;
       options.profilesSampleRate = 1.0;
+      options.enableAutoPerformanceTracing = true;
+      options.captureFailedRequests = true;
     },
     appRunner: () => runApp(SentryWidget(child: const MyApp())),
   );

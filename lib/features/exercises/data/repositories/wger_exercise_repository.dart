@@ -4,25 +4,42 @@ import '../../domain/models/exercise.dart';
 import '../../domain/repositories/exercise_repository.dart';
 import 'package:sentry/sentry.dart';
 import 'package:dio/dio.dart';
+import 'package:workout_tracker/core/network/dio_client.dart';
 
 class WgerExerciseRepository implements ExerciseRepository {
   final baseUrl = 'https://wger.de/api/v2';
-  final _dio = Dio();
+  final _dio = DioClient.instance;  // Use the shared instance
   
   @override
   Future<List<Exercise>> getExercises({int page = 1}) async {
-    final response = await _dio.get(
-      '/exercise',
-      queryParameters: {
-        'language': '1',  // English only
-        'limit': '20',    // Page size
-        'offset': ((page - 1) * 20).toString(), // Pagination offset
-      },
+    // Start a transaction for this operation
+    final transaction = Sentry.startTransaction(
+      'get_exercises',
+      'http.request',
+      bindToScope: true,
     );
-    
-    return (response.data['results'] as List)
-        .map((json) => Exercise.fromJson(json))
-        .toList();
+
+    try {
+      final response = await _dio.get(
+        '$baseUrl/exercise',
+        queryParameters: {
+          'language': '1',  // English only
+          'limit': '20',    // Page size
+          'offset': ((page - 1) * 20).toString(), // Pagination offset
+        },
+      );
+      
+      transaction.status = SpanStatus.ok();
+      return (response.data['results'] as List)
+          .map((json) => Exercise.fromJson(json))
+          .toList();
+    } catch (e, stackTrace) {
+      transaction.status = SpanStatus.internalError();
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      rethrow;
+    } finally {
+      await transaction.finish();
+    }
   }
 
   String? _mapCategory(dynamic category) {
@@ -102,16 +119,31 @@ class WgerExerciseRepository implements ExerciseRepository {
   }
 
   Future<List<Exercise>> searchExercises(String query) async {
-    final response = await _dio.get(
-      '/exercise',
-      queryParameters: {
-        'name': query,  // Filter by name field
-        'language': '1', // English only
-      },
+    final transaction = Sentry.startTransaction(
+      'search_exercises',
+      'http.request',
+      bindToScope: true,
     );
-    
-    return (response.data['results'] as List)
-        .map((json) => Exercise.fromJson(json))
-        .toList();
+
+    try {
+      final response = await _dio.get(
+        '$baseUrl/exercise',  // Add the baseUrl here
+        queryParameters: {
+          'name': query,
+          'language': '1',
+        },
+      );
+      
+      transaction.status = SpanStatus.ok();
+      return (response.data['results'] as List)
+          .map((json) => Exercise.fromJson(json))
+          .toList();
+    } catch (e, stackTrace) {
+      transaction.status = SpanStatus.internalError();
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      rethrow;
+    } finally {
+      await transaction.finish();
+    }
   }
 } 
